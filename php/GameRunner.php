@@ -10,4 +10,3 @@ $aGame->add("Sue");
 
 $aGame->play();
 $aGame->printLogs();
-  

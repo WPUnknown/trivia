@@ -2,7 +2,7 @@
 
 class Game
 {
-    private int $winningScore = 6;
+    private int $winningScore;
 
     private array $players;
     private array $places;
@@ -70,7 +70,6 @@ class Game
             return false;
         }
 
-        $running = true;
         do {
             $this->roll();
             $running = !$this->wasCorrectlyAnswered();
