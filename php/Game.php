@@ -110,36 +110,26 @@ class Game
                 $this->isGettingOutOfPenaltyBox = true;
 
                 $this->addLogEntry($this->getCurrentPlayerName() . " is getting out of the penalty box");
-                $this->places[$this->currentPlayer] = $this->getCurrentPlacePlayer($this->currentPlayer) + $roll;
-                if ($this->getCurrentPlacePlayer($this->currentPlayer) > 11) {
-                    $this->places[$this->currentPlayer] = $this->getCurrentPlacePlayer($this->currentPlayer) - 12;
-                }
-
-                $this->addLogEntry(
-                    $this->players[$this->currentPlayer]
-                    . "'s new location is "
-                    . $this->getCurrentPlacePlayer($this->currentPlayer)
-                );
-                $this->addLogEntry("The category is " . $this->currentCategory());
-                $this->askQuestion();
             } else {
                 $this->addLogEntry($this->getCurrentPlayerName() . " is not getting out of the penalty box");
                 $this->isGettingOutOfPenaltyBox = false;
-            }
-        } else {
-            $this->places[$this->currentPlayer] = $this->getCurrentPlacePlayer($this->currentPlayer) + $roll;
-            if ($this->getCurrentPlacePlayer($this->currentPlayer) > 11) {
-                $this->places[$this->currentPlayer] = $this->getCurrentPlacePlayer($this->currentPlayer) - 12;
-            }
 
-            $this->addLogEntry(
-                $this->getCurrentPlayerName()
-                . "'s new location is "
-                . $this->getCurrentPlacePlayer($this->currentPlayer)
-            );
-            $this->addLogEntry("The category is " . $this->currentCategory());
-            $this->askQuestion();
+                return;
+            }
         }
+
+        $this->places[$this->currentPlayer] = $this->getCurrentPlacePlayer($this->currentPlayer) + $roll;
+        if ($this->getCurrentPlacePlayer($this->currentPlayer) > 11) {
+            $this->places[$this->currentPlayer] = $this->getCurrentPlacePlayer($this->currentPlayer) - 12;
+        }
+
+        $this->addLogEntry(
+            $this->getCurrentPlayerName()
+            . "'s new location is "
+            . $this->getCurrentPlacePlayer($this->currentPlayer)
+        );
+        $this->addLogEntry("The category is " . $this->currentCategory());
+        $this->askQuestion();
     }
 
     private function askQuestion()
