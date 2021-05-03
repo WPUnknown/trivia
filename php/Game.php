@@ -48,6 +48,11 @@ class Game
         return true;
     }
 
+    /**
+     * Start playing the game.
+     *
+     * @return bool
+     */
     public function play(): bool
     {
         if (!$this->isPlayable()) {
@@ -57,13 +62,8 @@ class Game
 
         $running = true;
         do {
-
-            if (rand(0, 9) == 7) {
-                $this->wrongAnswer();
-            } else {
-                $running = !$this->wasCorrectlyAnswered();
-            }
             $this->roll();
+            $running = !$this->wasCorrectlyAnswered();
         } while ($running);
 
         $this->addLogEntry("Player " . $this->getCurrentPlayerName() . " won the game");
@@ -184,38 +184,38 @@ class Game
         return $this->places[$player];
     }
 
+    /**
+     * Checks if the question was correctly answered.
+     *
+     * @return bool
+     */
     private function wasCorrectlyAnswered(): bool
     {
-        if ($this->inPenaltyBox[$this->currentPlayer] && !$this->isGettingOutOfPenaltyBox) {
-            $this->nextPlayer();
-            return false;
+        $winner = false;
+
+        if (rand(0, 9) == 7) {
+            $this->addLogEntry("Question was incorrectly answered");
+            $this->addLogEntry($this->getCurrentPlayerName() . " was sent to the penalty box");
+
+            $this->inPenaltyBox[$this->currentPlayer] = true;
+        } elseif (!($this->inPenaltyBox[$this->currentPlayer] && !$this->isGettingOutOfPenaltyBox)) {
+            $this->addLogEntry("Answer was correct!!!!");
+            $this->purses[$this->currentPlayer]++;
+            $this->addLogEntry(
+                $this->getCurrentPlayerName()
+                . " now has "
+                . $this->purses[$this->currentPlayer]
+                . " Gold Coins."
+            );
+
+            $winner = $this->didPlayerWin();
         }
-
-        $this->addLogEntry("Answer was correct!!!!");
-        $this->purses[$this->currentPlayer]++;
-        $this->addLogEntry(
-            $this->getCurrentPlayerName()
-            . " now has "
-            . $this->purses[$this->currentPlayer]
-            . " Gold Coins."
-        );
-
-        $winner = $this->didPlayerWin();
 
         if (!$winner) {
             $this->nextPlayer();
         }
 
         return $winner;
-    }
-
-    private function wrongAnswer()
-    {
-        $this->addLogEntry("Question was incorrectly answered");
-        $this->addLogEntry($this->getCurrentPlayerName() . " was sent to the penalty box");
-        $this->inPenaltyBox[$this->currentPlayer] = true;
-
-        $this->nextPlayer();
     }
 
     private function nextPlayer()
