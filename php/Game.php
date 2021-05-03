@@ -156,33 +156,17 @@ class Game
 
     private function currentCategory(): string
     {
-        if ($this->getCurrentPlacePlayer($this->currentPlayer) == 0) {
-            return "Pop";
+        $currentPlace = $this->getCurrentPlacePlayer($this->currentPlayer) % 4;
+
+        switch ($currentPlace) {
+            case 0:
+                return 'Pop';
+            case 1:
+                return 'Science';
+            case 2:
+                return 'Sports';
         }
-        if ($this->getCurrentPlacePlayer($this->currentPlayer) == 4) {
-            return "Pop";
-        }
-        if ($this->getCurrentPlacePlayer($this->currentPlayer) == 8) {
-            return "Pop";
-        }
-        if ($this->getCurrentPlacePlayer($this->currentPlayer) == 1) {
-            return "Science";
-        }
-        if ($this->getCurrentPlacePlayer($this->currentPlayer) == 5) {
-            return "Science";
-        }
-        if ($this->getCurrentPlacePlayer($this->currentPlayer) == 9) {
-            return "Science";
-        }
-        if ($this->getCurrentPlacePlayer($this->currentPlayer) == 2) {
-            return "Sports";
-        }
-        if ($this->getCurrentPlacePlayer($this->currentPlayer) == 6) {
-            return "Sports";
-        }
-        if ($this->getCurrentPlacePlayer($this->currentPlayer) == 10) {
-            return "Sports";
-        }
+
         return "Rock";
     }
 
