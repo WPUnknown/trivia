@@ -19,6 +19,10 @@ class Game
 
     private array $logs = [];
 
+    /**
+     * Game constructor.
+     * @param int $winningScore
+     */
     public function __construct(int $winningScore = 6)
     {
         $this->winningScore = $winningScore;
@@ -36,6 +40,12 @@ class Game
         $this->generateQuestions();
     }
 
+    /**
+     * Add new player to the game.
+     *
+     * @param string $playerName
+     * @return bool
+     */
     public function add(string $playerName): bool
     {
         array_push($this->players, $playerName);
@@ -71,11 +81,17 @@ class Game
         return true;
     }
 
+    /*
+     * Print the logs to the output.
+     */
     public function printLogs()
     {
         echo implode("\n", $this->logs);
     }
 
+    /**
+     * Generate the questions to be answered.
+     */
     private function generateQuestions()
     {
         for ($i = 0; $i < 50; $i++) {
@@ -86,16 +102,33 @@ class Game
         }
     }
 
+    /**
+     * Helper method to format the question string.
+     *
+     * @param string $type
+     * @param int $index
+     * @return string
+     */
     private function createQuestion(string $type, int $index): string
     {
         return $type . " " . $index;
     }
 
+    /**
+     * Is this game playable.
+     *
+     * @return bool
+     */
     private function isPlayable(): bool
     {
         return ($this->howManyPlayers() >= 2);
     }
 
+    /**
+     * Get amount of players.
+     *
+     * @return int
+     */
     private function howManyPlayers(): int
     {
         return count($this->players);
@@ -138,6 +171,9 @@ class Game
         $this->askQuestion();
     }
 
+    /**
+     * Log the asked question.
+     */
     private function askQuestion()
     {
         $category = $this->currentCategory();
@@ -158,6 +194,11 @@ class Game
         }
     }
 
+    /**
+     * Get the current category as readable name.
+     *
+     * @return string
+     */
     private function currentCategory(): string
     {
         $currentPlace = $this->getCurrentPlacePlayer($this->currentPlayer) % 4;
@@ -174,11 +215,22 @@ class Game
         return "Rock";
     }
 
+    /**
+     * Get the name of the current player.
+     *
+     * @return string
+     */
     private function getCurrentPlayerName(): string
     {
         return $this->players[$this->currentPlayer];
     }
 
+    /**
+     * Get the place of the current player.
+     *
+     * @param int $player
+     * @return int
+     */
     private function getCurrentPlacePlayer(int $player): int
     {
         return $this->places[$player];
@@ -218,6 +270,9 @@ class Game
         return $winner;
     }
 
+    /**
+     * Helper method to get the next player
+     */
     private function nextPlayer()
     {
         $this->currentPlayer++;
@@ -226,11 +281,21 @@ class Game
         }
     }
 
+    /**
+     * Checks if the current player wins.
+     *
+     * @return bool
+     */
     private function didPlayerWin(): bool
     {
         return $this->purses[$this->currentPlayer] == $this->winningScore;
     }
 
+    /**
+     * Add new entry to the log.
+     *
+     * @param string $line
+     */
     private function addLogEntry(string $line)
     {
         $this->logs[] = $line;
