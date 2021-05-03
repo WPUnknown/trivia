@@ -140,30 +140,32 @@ class Game
     private function roll()
     {
         $roll = rand(1, 6);
+        $playerName = $this->getCurrentPlayerName();
 
-        $this->addLogEntry($this->getCurrentPlayerName() . " is the current player");
+        $this->addLogEntry($playerName . " is the current player");
         $this->addLogEntry("They have rolled a " . $roll);
 
         if ($this->inPenaltyBox[$this->currentPlayer]) {
             if ($roll % 2 != 0) {
                 $this->isGettingOutOfPenaltyBox = true;
 
-                $this->addLogEntry($this->getCurrentPlayerName() . " is getting out of the penalty box");
+                $this->addLogEntry($playerName . " is getting out of the penalty box");
             } else {
-                $this->addLogEntry($this->getCurrentPlayerName() . " is not getting out of the penalty box");
+                $this->addLogEntry($playerName . " is not getting out of the penalty box");
                 $this->isGettingOutOfPenaltyBox = false;
 
                 return;
             }
         }
 
-        $this->places[$this->currentPlayer] = $this->getCurrentPlacePlayer($this->currentPlayer) + $roll;
-        if ($this->getCurrentPlacePlayer($this->currentPlayer) > 11) {
-            $this->places[$this->currentPlayer] = $this->getCurrentPlacePlayer($this->currentPlayer) - 12;
+        $currentPlacePlayer = $this->getCurrentPlacePlayer($this->currentPlayer);
+        $this->places[$this->currentPlayer] = $currentPlacePlayer + $roll;
+        if ($currentPlacePlayer > 11) {
+            $this->places[$this->currentPlayer] = $currentPlacePlayer - 12;
         }
 
         $this->addLogEntry(
-            $this->getCurrentPlayerName()
+            $playerName
             . "'s new location is "
             . $this->getCurrentPlacePlayer($this->currentPlayer)
         );
