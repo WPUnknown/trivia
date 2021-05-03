@@ -55,15 +55,16 @@ class Game
             return false;
         }
 
+        $running = true;
         do {
             $this->roll(rand(0, 5) + 1);
 
             if (rand(0, 9) == 7) {
-                $notAWinner = $this->wrongAnswer();
+                $this->wrongAnswer();
             } else {
-                $notAWinner = $this->wasCorrectlyAnswered();
+                $running = !$this->wasCorrectlyAnswered();
             }
-        } while ($notAWinner);
+        } while ($running);
 
         $this->addLogEntry("Player " . $this->getCurrentPlayerName() . " won the game");
 
@@ -182,7 +183,7 @@ class Game
     {
         if ($this->inPenaltyBox[$this->currentPlayer] && !$this->isGettingOutOfPenaltyBox) {
             $this->nextPlayer();
-            return true;
+            return false;
         }
 
         $this->addLogEntry("Answer was correct!!!!");
@@ -196,21 +197,20 @@ class Game
 
         $winner = $this->didPlayerWin();
 
-        if ($winner) {
+        if (!$winner) {
             $this->nextPlayer();
         }
 
         return $winner;
     }
 
-    private function wrongAnswer(): bool
+    private function wrongAnswer()
     {
         $this->addLogEntry("Question was incorrectly answered");
         $this->addLogEntry($this->getCurrentPlayerName() . " was sent to the penalty box");
         $this->inPenaltyBox[$this->currentPlayer] = true;
 
         $this->nextPlayer();
-        return true;
     }
 
     private function nextPlayer()
@@ -223,7 +223,7 @@ class Game
 
     private function didPlayerWin(): bool
     {
-        return !($this->purses[$this->currentPlayer] == $this->winningScore);
+        return $this->purses[$this->currentPlayer] == $this->winningScore;
     }
 
     private function addLogEntry(string $line)
