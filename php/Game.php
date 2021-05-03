@@ -1,10 +1,5 @@
 <?php
 
-function echoln($string)
-{
-    echo $string . "\n";
-}
-
 class Game
 {
     private array $players;
@@ -19,6 +14,8 @@ class Game
 
     private int $currentPlayer = 0;
     private bool $isGettingOutOfPenaltyBox;
+
+    private array $logs = [];
 
     public function __construct()
     {
@@ -42,15 +39,15 @@ class Game
         $this->purses[$this->howManyPlayers()] = 0;
         $this->inPenaltyBox[$this->howManyPlayers()] = false;
 
-        echoln($playerName . " was added");
-        echoln("They are player number " . count($this->players));
+        $this->addLogEntry($playerName . " was added");
+        $this->addLogEntry("They are player number " . count($this->players));
         return true;
     }
 
     public function play(): bool
     {
         if (!$this->isPlayable()) {
-            echoln("Can't play the game with just 1 player");
+            $this->addLogEntry("Can't play the game with just 1 player");
             return false;
         }
 
@@ -64,9 +61,14 @@ class Game
             }
         } while ($notAWinner);
 
-        echoln("Player " . $this->getCurrentPlayerName() . " won the game");
+        $this->addLogEntry("Player " . $this->getCurrentPlayerName() . " won the game");
 
         return true;
+    }
+
+    public function printLogs()
+    {
+        echo implode("\n", $this->logs);
     }
 
     private function generateQuestions()
@@ -96,28 +98,28 @@ class Game
 
     private function roll($roll)
     {
-        echoln($this->getCurrentPlayerName() . " is the current player");
-        echoln("They have rolled a " . $roll);
+        $this->addLogEntry($this->getCurrentPlayerName() . " is the current player");
+        $this->addLogEntry("They have rolled a " . $roll);
 
         if ($this->inPenaltyBox[$this->currentPlayer]) {
             if ($roll % 2 != 0) {
                 $this->isGettingOutOfPenaltyBox = true;
 
-                echoln($this->getCurrentPlayerName() . " is getting out of the penalty box");
+                $this->addLogEntry($this->getCurrentPlayerName() . " is getting out of the penalty box");
                 $this->places[$this->currentPlayer] = $this->places[$this->currentPlayer] + $roll;
                 if ($this->places[$this->currentPlayer] > 11) {
                     $this->places[$this->currentPlayer] = $this->places[$this->currentPlayer] - 12;
                 }
 
-                echoln(
+                $this->addLogEntry(
                     $this->players[$this->currentPlayer]
                     . "'s new location is "
                     . $this->places[$this->currentPlayer]
                 );
-                echoln("The category is " . $this->currentCategory());
+                $this->addLogEntry("The category is " . $this->currentCategory());
                 $this->askQuestion();
             } else {
-                echoln($this->getCurrentPlayerName() . " is not getting out of the penalty box");
+                $this->addLogEntry($this->getCurrentPlayerName() . " is not getting out of the penalty box");
                 $this->isGettingOutOfPenaltyBox = false;
             }
         } else {
@@ -126,12 +128,12 @@ class Game
                 $this->places[$this->currentPlayer] = $this->places[$this->currentPlayer] - 12;
             }
 
-            echoln(
+            $this->addLogEntry(
                 $this->getCurrentPlayerName()
                 . "'s new location is "
                 . $this->places[$this->currentPlayer]
             );
-            echoln("The category is " . $this->currentCategory());
+            $this->addLogEntry("The category is " . $this->currentCategory());
             $this->askQuestion();
         }
     }
@@ -139,16 +141,16 @@ class Game
     private function askQuestion()
     {
         if ($this->currentCategory() == "Pop") {
-            echoln(array_shift($this->popQuestions));
+            $this->addLogEntry(array_shift($this->popQuestions));
         }
         if ($this->currentCategory() == "Science") {
-            echoln(array_shift($this->scienceQuestions));
+            $this->addLogEntry(array_shift($this->scienceQuestions));
         }
         if ($this->currentCategory() == "Sports") {
-            echoln(array_shift($this->sportsQuestions));
+            $this->addLogEntry(array_shift($this->sportsQuestions));
         }
         if ($this->currentCategory() == "Rock") {
-            echoln(array_shift($this->rockQuestions));
+            $this->addLogEntry(array_shift($this->rockQuestions));
         }
     }
 
@@ -193,9 +195,9 @@ class Game
     {
         if ($this->inPenaltyBox[$this->currentPlayer]) {
             if ($this->isGettingOutOfPenaltyBox) {
-                echoln("Answer was correct!!!!");
+                $this->addLogEntry("Answer was correct!!!!");
                 $this->purses[$this->currentPlayer]++;
-                echoln(
+                $this->addLogEntry(
                     $this->getCurrentPlayerName()
                     . " now has "
                     . $this->purses[$this->currentPlayer]
@@ -214,9 +216,9 @@ class Game
                 return true;
             }
         } else {
-            echoln("Answer was correct!!!!");
+            $this->addLogEntry("Answer was correct!!!!");
             $this->purses[$this->currentPlayer]++;
-            echoln(
+            $this->addLogEntry(
                 $this->getCurrentPlayerName()
                 . " now has "
                 . $this->purses[$this->currentPlayer]
@@ -235,8 +237,8 @@ class Game
 
     private function wrongAnswer(): bool
     {
-        echoln("Question was incorrectly answered");
-        echoln($this->getCurrentPlayerName() . " was sent to the penalty box");
+        $this->addLogEntry("Question was incorrectly answered");
+        $this->addLogEntry($this->getCurrentPlayerName() . " was sent to the penalty box");
         $this->inPenaltyBox[$this->currentPlayer] = true;
 
         $this->nextPlayer();
@@ -251,9 +253,13 @@ class Game
         }
     }
 
-
     private function didPlayerWin(): bool
     {
         return !($this->purses[$this->currentPlayer] == 6);
+    }
+
+    private function addLogEntry(string $line)
+    {
+        $this->logs[] = $line;
     }
 }

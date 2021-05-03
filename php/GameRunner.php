@@ -11,4 +11,5 @@ $aGame->add("Pat");
 $aGame->add("Sue");
 
 $aGame->play();
+$aGame->printLogs();
   
