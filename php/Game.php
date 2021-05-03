@@ -36,7 +36,7 @@ class Game
         $this->generateQuestions();
     }
 
-    public function add($playerName): bool
+    public function add(string $playerName): bool
     {
         array_push($this->players, $playerName);
         $this->places[$this->howManyPlayers()] = 0;
@@ -100,7 +100,7 @@ class Game
         return count($this->players);
     }
 
-    private function roll($roll)
+    private function roll(int $roll)
     {
         $this->addLogEntry($this->getCurrentPlayerName() . " is the current player");
         $this->addLogEntry("They have rolled a " . $roll);
@@ -144,17 +144,22 @@ class Game
 
     private function askQuestion()
     {
-        if ($this->currentCategory() == "Pop") {
-            $this->addLogEntry(array_shift($this->popQuestions));
-        }
-        if ($this->currentCategory() == "Science") {
-            $this->addLogEntry(array_shift($this->scienceQuestions));
-        }
-        if ($this->currentCategory() == "Sports") {
-            $this->addLogEntry(array_shift($this->sportsQuestions));
-        }
-        if ($this->currentCategory() == "Rock") {
-            $this->addLogEntry(array_shift($this->rockQuestions));
+        $category = $this->currentCategory();
+
+        switch ($category)
+        {
+            case "Pop":
+                $this->addLogEntry(array_shift($this->popQuestions));
+                break;
+            case "Science":
+                $this->addLogEntry(array_shift($this->scienceQuestions));
+                break;
+            case "Sports":
+                $this->addLogEntry(array_shift($this->sportsQuestions));
+                break;
+            case "Rock":
+                $this->addLogEntry(array_shift($this->rockQuestions));
+                break;
         }
     }
 
