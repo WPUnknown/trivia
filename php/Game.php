@@ -2,6 +2,8 @@
 
 class Game
 {
+    private int $winningScore = 6;
+
     private array $players;
     private array $places;
     private array $purses;
@@ -17,8 +19,10 @@ class Game
 
     private array $logs = [];
 
-    public function __construct()
+    public function __construct(int $winningScore = 6)
     {
+        $this->winningScore = $winningScore;
+
         $this->players = [];
         $this->places = [0];
         $this->purses = [0];
@@ -244,7 +248,7 @@ class Game
 
     private function didPlayerWin(): bool
     {
-        return !($this->purses[$this->currentPlayer] == 6);
+        return !($this->purses[$this->currentPlayer] == $this->winningScore);
     }
 
     private function addLogEntry(string $line)
