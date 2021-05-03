@@ -32,12 +32,7 @@ class Game
         $this->sportsQuestions = [];
         $this->rockQuestions = [];
 
-        for ($i = 0; $i < 50; $i++) {
-            array_push($this->popQuestions, "Pop Question " . $i);
-            array_push($this->scienceQuestions, ("Science Question " . $i));
-            array_push($this->sportsQuestions, ("Sports Question " . $i));
-            array_push($this->rockQuestions, $this->createRockQuestion($i));
-        }
+        $this->generateQuestions();
     }
 
     public function add($playerName): bool
@@ -74,9 +69,19 @@ class Game
         return true;
     }
 
-    private function createRockQuestion($index): string
+    private function generateQuestions()
     {
-        return "Rock Question " . $index;
+        for ($i = 0; $i < 50; $i++) {
+            array_push($this->popQuestions, $this->createQuestion('Pop Question', $i));
+            array_push($this->scienceQuestions, $this->createQuestion('Science Question', $i));
+            array_push($this->sportsQuestions, $this->createQuestion('Sports Question', $i));
+            array_push($this->rockQuestions, $this->createQuestion('Rock Question', $i));
+        }
+    }
+
+    private function createQuestion(string $type, int $index): string
+    {
+        return $type . " " . $index;
     }
 
     private function isPlayable(): bool
