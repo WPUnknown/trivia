@@ -40,6 +40,19 @@ class Game
         }
     }
 
+    public function play()
+    {
+        do {
+            $this->roll(rand(0, 5) + 1);
+
+            if (rand(0, 9) == 7) {
+                $notAWinner = $this->wrongAnswer();
+            } else {
+                $notAWinner = $this->wasCorrectlyAnswered();
+            }
+        } while ($notAWinner);
+    }
+
     function createRockQuestion($index)
     {
         return "Rock Question " . $index;
