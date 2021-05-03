@@ -4,3 +4,6 @@
 # an example. Thanks.
 .DS_Store
 php/.idea
+php/.phpunit.result.cache
+php/coverage
+php/vendor

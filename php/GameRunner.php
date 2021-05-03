@@ -1,8 +1,6 @@
 <?php
 
-include __DIR__ . '/Game.php';
-
-$notAWinner = false;
+require __DIR__ . '/Game.php';
 
 $aGame = new Game();
 
