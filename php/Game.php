@@ -57,13 +57,13 @@ class Game
 
         $running = true;
         do {
-            $this->roll(rand(0, 5) + 1);
 
             if (rand(0, 9) == 7) {
                 $this->wrongAnswer();
             } else {
                 $running = !$this->wasCorrectlyAnswered();
             }
+            $this->roll();
         } while ($running);
 
         $this->addLogEntry("Player " . $this->getCurrentPlayerName() . " won the game");
@@ -101,8 +101,13 @@ class Game
         return count($this->players);
     }
 
-    private function roll(int $roll)
+    /**
+     * Start rolling the dice.
+     */
+    private function roll()
     {
+        $roll = rand(1, 6);
+
         $this->addLogEntry($this->getCurrentPlayerName() . " is the current player");
         $this->addLogEntry("They have rolled a " . $roll);
 
