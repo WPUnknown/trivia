@@ -136,8 +136,7 @@ class Game
     {
         $category = $this->currentCategory();
 
-        switch ($category)
-        {
+        switch ($category) {
             case "Pop":
                 $this->addLogEntry(array_shift($this->popQuestions));
                 break;
@@ -181,46 +180,27 @@ class Game
 
     private function wasCorrectlyAnswered(): bool
     {
-        if ($this->inPenaltyBox[$this->currentPlayer]) {
-            if ($this->isGettingOutOfPenaltyBox) {
-                $this->addLogEntry("Answer was correct!!!!");
-                $this->purses[$this->currentPlayer]++;
-                $this->addLogEntry(
-                    $this->getCurrentPlayerName()
-                    . " now has "
-                    . $this->purses[$this->currentPlayer]
-                    . " Gold Coins."
-                );
-
-                $winner = $this->didPlayerWin();
-
-                if ($winner) {
-                    $this->nextPlayer();
-                }
-
-                return $winner;
-            } else {
-                $this->nextPlayer();
-                return true;
-            }
-        } else {
-            $this->addLogEntry("Answer was correct!!!!");
-            $this->purses[$this->currentPlayer]++;
-            $this->addLogEntry(
-                $this->getCurrentPlayerName()
-                . " now has "
-                . $this->purses[$this->currentPlayer]
-                . " Gold Coins."
-            );
-
-            $winner = $this->didPlayerWin();
-
-            if ($winner) {
-                $this->nextPlayer();
-            }
-
-            return $winner;
+        if ($this->inPenaltyBox[$this->currentPlayer] && !$this->isGettingOutOfPenaltyBox) {
+            $this->nextPlayer();
+            return true;
         }
+
+        $this->addLogEntry("Answer was correct!!!!");
+        $this->purses[$this->currentPlayer]++;
+        $this->addLogEntry(
+            $this->getCurrentPlayerName()
+            . " now has "
+            . $this->purses[$this->currentPlayer]
+            . " Gold Coins."
+        );
+
+        $winner = $this->didPlayerWin();
+
+        if ($winner) {
+            $this->nextPlayer();
+        }
+
+        return $winner;
     }
 
     private function wrongAnswer(): bool
