@@ -106,15 +106,15 @@ class Game
                 $this->isGettingOutOfPenaltyBox = true;
 
                 $this->addLogEntry($this->getCurrentPlayerName() . " is getting out of the penalty box");
-                $this->places[$this->currentPlayer] = $this->places[$this->currentPlayer] + $roll;
-                if ($this->places[$this->currentPlayer] > 11) {
-                    $this->places[$this->currentPlayer] = $this->places[$this->currentPlayer] - 12;
+                $this->places[$this->currentPlayer] = $this->getCurrentPlacePlayer($this->currentPlayer) + $roll;
+                if ($this->getCurrentPlacePlayer($this->currentPlayer) > 11) {
+                    $this->places[$this->currentPlayer] = $this->getCurrentPlacePlayer($this->currentPlayer) - 12;
                 }
 
                 $this->addLogEntry(
                     $this->players[$this->currentPlayer]
                     . "'s new location is "
-                    . $this->places[$this->currentPlayer]
+                    . $this->getCurrentPlacePlayer($this->currentPlayer)
                 );
                 $this->addLogEntry("The category is " . $this->currentCategory());
                 $this->askQuestion();
@@ -123,15 +123,15 @@ class Game
                 $this->isGettingOutOfPenaltyBox = false;
             }
         } else {
-            $this->places[$this->currentPlayer] = $this->places[$this->currentPlayer] + $roll;
-            if ($this->places[$this->currentPlayer] > 11) {
-                $this->places[$this->currentPlayer] = $this->places[$this->currentPlayer] - 12;
+            $this->places[$this->currentPlayer] = $this->getCurrentPlacePlayer($this->currentPlayer) + $roll;
+            if ($this->getCurrentPlacePlayer($this->currentPlayer) > 11) {
+                $this->places[$this->currentPlayer] = $this->getCurrentPlacePlayer($this->currentPlayer) - 12;
             }
 
             $this->addLogEntry(
                 $this->getCurrentPlayerName()
                 . "'s new location is "
-                . $this->places[$this->currentPlayer]
+                . $this->getCurrentPlacePlayer($this->currentPlayer)
             );
             $this->addLogEntry("The category is " . $this->currentCategory());
             $this->askQuestion();
@@ -156,31 +156,31 @@ class Game
 
     private function currentCategory(): string
     {
-        if ($this->places[$this->currentPlayer] == 0) {
+        if ($this->getCurrentPlacePlayer($this->currentPlayer) == 0) {
             return "Pop";
         }
-        if ($this->places[$this->currentPlayer] == 4) {
+        if ($this->getCurrentPlacePlayer($this->currentPlayer) == 4) {
             return "Pop";
         }
-        if ($this->places[$this->currentPlayer] == 8) {
+        if ($this->getCurrentPlacePlayer($this->currentPlayer) == 8) {
             return "Pop";
         }
-        if ($this->places[$this->currentPlayer] == 1) {
+        if ($this->getCurrentPlacePlayer($this->currentPlayer) == 1) {
             return "Science";
         }
-        if ($this->places[$this->currentPlayer] == 5) {
+        if ($this->getCurrentPlacePlayer($this->currentPlayer) == 5) {
             return "Science";
         }
-        if ($this->places[$this->currentPlayer] == 9) {
+        if ($this->getCurrentPlacePlayer($this->currentPlayer) == 9) {
             return "Science";
         }
-        if ($this->places[$this->currentPlayer] == 2) {
+        if ($this->getCurrentPlacePlayer($this->currentPlayer) == 2) {
             return "Sports";
         }
-        if ($this->places[$this->currentPlayer] == 6) {
+        if ($this->getCurrentPlacePlayer($this->currentPlayer) == 6) {
             return "Sports";
         }
-        if ($this->places[$this->currentPlayer] == 10) {
+        if ($this->getCurrentPlacePlayer($this->currentPlayer) == 10) {
             return "Sports";
         }
         return "Rock";
@@ -189,6 +189,11 @@ class Game
     private function getCurrentPlayerName(): string
     {
         return $this->players[$this->currentPlayer];
+    }
+
+    private function getCurrentPlacePlayer(int $player): int
+    {
+        return $this->places[$player];
     }
 
     private function wasCorrectlyAnswered(): bool
